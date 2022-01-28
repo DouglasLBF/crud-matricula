@@ -11290,3 +11290,7 @@ textarea.form-control-lg {
 .btn-cadastrar {
   float: right;
 }
+
+.container {
+  margin-top: 5%;
+}

@@ -11,12 +11,14 @@
 </head>
 
 <body>
-    <div class="container">
+    <div class="container-sm">
         <h1>Lista de alunos</h1>
         <button type="button" class="btn btn-success btn-cadastrar" id="btnCadastrarModal">
             Cadastrar Aluno
         </button>
-        <table class="table table-bordered data-table">
+    </div>
+    <div class="container">
+        <table class="table table-bordered data-table" >
             <thead>
                 <tr>
                     <th>Nº</th>
@@ -41,8 +43,8 @@
                     <form id="alunoForm" name="alunoForm" class="form-horizontal" >
                         <input type="hidden" name="aluno_id" id="aluno_id">
                         <div class="form-group">
-                            Nome:<br>
-                            <input type="text" class="form-control" name="nome" id="nome" placeholder="Insira seu nome" value="" required>
+                            Nome Completo:<br>
+                            <input type="text" class="form-control" name="nome" id="nome" placeholder="Insira seu nome completo" value="" required>
                         </div>
                         <div class="form-group">
                             Email:<br>
@@ -102,24 +104,29 @@
         });
 
         $("#btnSalvar").click(function(e){
-            e.preventDefault();
-            console.log(e);
+            var valid = this.form.checkValidity();
             $(this).html('Salvar');
-            $.ajax({
-                data:$("#alunoForm").serialize(),
-                url:"{{route('alunos.store')}}",
-                type:"POST",
-                datatype:'json',
-                success:function(data){
-                    $("alunoForm").trigger("reset");
-                    $("#AlunoModal").modal('hide');
-                    table.draw();
-                },
-                error:function(data){
-                    console.log('Error',data);
-                    $("#btnSalvar").html('Salvar');
-                }
-            })
+            if(valid){
+                event.preventDefault();
+
+                $.ajax({
+                    data:$("#alunoForm").serialize(),
+                    url:"{{route('alunos.store')}}",
+                    type:"POST",
+                    datatype:'json',
+                    success:function(data){
+                        $("alunoForm").trigger("reset");
+                        $("#AlunoModal").modal('hide');
+                        table.draw();
+                    },
+                    error:function(data){
+                        console.log('Error',data);
+                        $("#btnSalvar").html('Salvar');
+                    }
+                });
+            }
+
+
         });
 
         $('body').on('click','.deletarAluno',function(){
