@@ -7,60 +7,77 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Como executar o projeto depois de baixado
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Supondondo que voce ja tenha o xampp,composer,npm e o laravel instalado faça:
+-Clone o repositorio;
+-Digite o commando no terminal do seu desktop "composer install" . Ele vai instalar todos os pacotes php necessários;
+-Duplicar o arquivo ".env.example" e renomear para ".env" e fazer as configurações de acesso a banco;
+-Digite o commando no terminal do seu desktop "php artisan key:generate". Esse vai gerar uma chave dentro do .env para sua aplicação;
+-Digite o commando no termnial do seu desktop "npm install". Vai instalar o pacote do node necesario para executar a aplicaçao;
+-Instalar o drive do postgres no seu php.ini
+-Executar o comando das migrations "php artisan migrate " para criar as tabelas no seu banco ou executar as querys a seguir no seu sgbd;
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Query's
 
-## Learning Laravel
+-- Criar Database crudmatricula : 
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+CREATE DATABASE crudmatricula
+    WITH 
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'Portuguese_Brazil.1252'
+    LC_CTYPE = 'Portuguese_Brazil.1252'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1;
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+-- Tabelas :
 
-## Laravel Sponsors
+-- Tabela: public.alunos
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+    CREATE TABLE IF NOT EXISTS public.alunos
+    (
+        id bigint NOT NULL DEFAULT nextval('alunos_id_seq'::regclass),
+        nome character varying(255) COLLATE pg_catalog."default" NOT NULL,
+        email character varying(255) COLLATE pg_catalog."default" NOT NULL,
+        curso_id bigint NOT NULL,
+        created_at timestamp(0) without time zone,
+        updated_at timestamp(0) without time zone,
+        CONSTRAINT alunos_pkey PRIMARY KEY (id),
+        CONSTRAINT alunos_curso_id_foreign FOREIGN KEY (curso_id)
+            REFERENCES public.cursos (id) MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
+    )
 
-### Premium Partners
+    TABLESPACE pg_default;
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[CMS Max](https://www.cmsmax.com/)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-- **[Romega Software](https://romegasoftware.com)**
+    ALTER TABLE IF EXISTS public.alunos
+        OWNER to postgres;
+    
+-- Tabela: public.cursos
 
-## Contributing
+    CREATE TABLE IF NOT EXISTS public.cursos
+    (
+        id bigint NOT NULL DEFAULT nextval('cursos_id_seq'::regclass),
+        nome_curso character varying(255) COLLATE pg_catalog."default" NOT NULL,
+        created_at timestamp(0) without time zone,
+        updated_at timestamp(0) without time zone,
+        CONSTRAINT cursos_pkey PRIMARY KEY (id)
+    )
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    TABLESPACE pg_default;
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    ALTER TABLE IF EXISTS public.cursos
+        OWNER to postgres;
+  
+  ## Insert 
+  -- Necessario para o dropdownlist
+  
+      INSERT INTO public.cursos(nome_curso)
+	                    VALUES ('Inglês'),
+                               ('Francês'),
+                               ('Espanhol');
+   
+   ## Depois dessas configurações ja pode executar o projeto com o comando "php artisan serve"
