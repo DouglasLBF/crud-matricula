@@ -17,13 +17,16 @@
             Cadastrar Aluno
         </button>
         <table class="table table-bordered data-table">
-            <tr>
-                <th>Nº</th>
-                <th>Nome</th>
-                <th>Email</th>
-                <th>Curso</th>
-                <th>Ações</th>
-            </tr>
+            <thead>
+                <tr>
+                    <th>Nº</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Curso</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
         </table>
     </div>
 
